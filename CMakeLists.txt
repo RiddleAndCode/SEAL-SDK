@@ -1,31 +1,26 @@
 cmake_minimum_required(VERSION 3.13)
+set(LIBS "${CMAKE_SOURCE_DIR}/libs/")
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/libs/")
 
-SET(PROJECT dodo)
-
+project(dodo)
 file(GLOB SOURCES "src/*.c")
+add_subdirectory(bigchaindb/src)
+find_library(LIBSEA NAMES libsea.a)
 
 
+add_compile_options(-DuECC_VLI_NATIVE_LITTLE_ENDIAN=0 -std=c99 -O0 -g)
 
-add_executable(${PROJECT}
+
+add_executable(${PROJECT_NAME}
         ${SOURCES}
     )
 
-
-link_directories(libs/)
-
-add_compile_options(-DuECC_VLI_NATIVE_LITTLE_ENDIAN=0 -std=c99 -Wall -Wextra  -O0 -g --coverage -fsanitize=address -fno-omit-frame-pointer)
-
-target_link_libraries(${PROJECT}
-sea
-)
-
-
-add_subdirectory(bigchaindb/)
-
-target_include_directories(${PROJECT} PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
 inc
-bigchaindb/libs/trezor-crypto/
-bigchaindb/libs/json-maker
-bigchaindb/libs/base64
-bigchaindb/inc
 )
+target_link_libraries(${PROJECT_NAME} PUBLIC
+${LIBSEA}
+cbig
+)
+
+
