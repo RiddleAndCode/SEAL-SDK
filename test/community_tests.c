@@ -112,12 +112,10 @@ void test_save_pubkey()
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_save_key_pair(10,publicKeys[0],0,0,0));
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_save_key_pair(11,publicKeys[0],0,0,0));
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_save_key_pair(12,publicKeys[0],0,0,0));
-    TEST_ASSERT_EQUAL(SE_SUCCESS,se_save_key_pair(12,publicKeys[0],0,0,0));
 
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_get_pubkey(10,PUB,0));
     TEST_ASSERT_EQUAL(0,memcmp(PUB,publicKeys[0],64));
     memset(PUB,0,64);
-
 
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_get_pubkey(11,PUB,0));
     TEST_ASSERT_EQUAL(0,memcmp(PUB,publicKeys[0],64));
@@ -125,11 +123,7 @@ void test_save_pubkey()
 
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_get_pubkey(12,PUB,0));
     TEST_ASSERT_EQUAL(0,memcmp(PUB,publicKeys[0],64));
-    memset(PUB,0,64);
 
-    TEST_ASSERT_EQUAL(SE_SUCCESS,se_get_pubkey(12,PUB,0));
-    TEST_ASSERT_EQUAL(0,memcmp(PUB,publicKeys[0],64));
-    memset(PUB,0,64);
     TEST_ASSERT_EQUAL(SE_SUCCESS,se_close());
 
 
