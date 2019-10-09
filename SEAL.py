@@ -1,6 +1,7 @@
 import ctypes
 import base58
 import binascii
+DEBUG = False
 
 
 class SEAL:
@@ -29,7 +30,8 @@ class SEAL:
         if result != 0:
             raise Exception('Init failed')
         else:
-            print("SE Init Success\n")
+            if DEBUG:
+                print("SE Init Success\n")
 
 
     def wrap_function(self,lib, funcname, restype, argtypes):
@@ -44,7 +46,8 @@ class SEAL:
         if result != 0:
             raise Exception('i2c close failed')
         else:
-            print("SE se_close Success\n")
+            if DEBUG:
+                print("SE se_close Success\n")
 
     def get_random(self):
         random_buffer = ((ctypes.c_uint8) * 32 )()
@@ -52,7 +55,8 @@ class SEAL:
         if result != 0:
             raise Exception('rnd generation failed')
         else:
-            print("SE se_get_random Success\n")
+            if DEBUG:
+                print("SE se_get_random Success\n")
         return random_buffer
 
 
@@ -63,14 +67,16 @@ class SEAL:
             raise Exception('se_save_key_pair failed')
         else:
             self.store_data(0,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(secret)),32)
-            print("SE se_save_key_pair Success\n")
+            if DEBUG:
+                print("SE se_save_key_pair Success\n")
 
     def store_data(self,offset,data,datalen):
         result = self.se_write_data(offset,data,datalen)
         if result != 0:
             raise Exception('rnd generation failed')
         else:
-            print("SE se_write_data Success\n")
+            if DEBUG:
+                print("SE se_write_data Success\n")
 
 
     def read_data(self,offset,datalen):
@@ -80,7 +86,8 @@ class SEAL:
         if result != 0:
             raise Exception('read_data failed')
         else:
-            print("SE se_read_data Success\n")
+            if DEBUG:
+                print("SE se_read_data Success\n")
         return bytes(data)
 
     def get_public_key(self):
@@ -90,7 +97,8 @@ class SEAL:
         if result != 0:
             raise Exception('get_public_key failed')
         else:
-            print("SE se_get_pubkey Success\n")
+            if DEBUG:
+                print("SE se_get_pubkey Success\n")
         return bytes(bytearray(pubKey)[:32])
 
     def get_hash(self,data,dataLen):
@@ -101,5 +109,6 @@ class SEAL:
         if result != 0:
             raise Exception('get_hash failed')
         else:
-            print("SE se_get_sha256 Success\n")
+            if DEBUG:
+                print("SE se_get_sha256 Success\n")
         return bytes(sha)
