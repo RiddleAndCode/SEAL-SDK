@@ -178,6 +178,9 @@ def main(argv):
             sys.exit()
         elif opt == '-c':
             tx_ids = os.listdir(current_dir + "/database")
+            if not tx_ids:
+                print("\nNo outpul file found. Exiting ...\n")
+                sys.exit()
             print("\n")
             for x in tx_ids:
                 full_tx = bdb.transactions.retrieve(txid=x)
