@@ -1,6 +1,6 @@
 #!/bin/sh
 
 
-while inotifywait -e modify se.py SEAL.py ; do
-scp se.py SEAL.py pi@192.168.23.105:/home/pi/dodo/machine-identity-demo-data
+while inotifywait -e modify SDK_test.py SEAL.py ; do
+scp SDK_test.py SEAL.py pi@192.168.23.105:/home/pi/dodo/SEAL-SDK
 done
