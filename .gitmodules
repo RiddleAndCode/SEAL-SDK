@@ -1,3 +1,0 @@
-[submodule "bigchaindb"]
-	path = bigchaindb
-	url = git@github.com:RiddleAndCode/bigchaindb-c-driver.git
