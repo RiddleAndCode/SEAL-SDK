@@ -108,9 +108,14 @@ def send_data_blockchain(se,device_name,pair,file):
 bdb = BigchainDB(bdb_root_url)
 
 def main(argv):
+    if len(sys.argv) <= 1 :
+        print ('\n\tUsage : python3 SDK_test.py -i <ID>\n\n\t<ID> can not be empty !\n\n \r\trun python3 SDK_test.py - h for HELP.\n\n')
+
+        sys.exit(2)
 
     raspberry = SEAL(current_dir+"/libseadyn.so")
     inputfile = ''
+
     if not os.path.exists('database'):
         os.makedirs('database')
     try:
