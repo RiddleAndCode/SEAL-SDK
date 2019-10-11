@@ -109,7 +109,7 @@ bdb = BigchainDB(bdb_root_url)
 
 def main(argv):
 
-    raspberry = SEAL("/home/pi/dodo/test/libseadyn.so")
+    raspberry = SEAL(current_dir+"/libseadyn.so")
     inputfile = ''
     if not os.path.exists('database'):
         os.makedirs('database')
