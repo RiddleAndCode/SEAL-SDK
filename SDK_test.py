@@ -108,9 +108,14 @@ def send_data_blockchain(se,device_name,pair,file):
 bdb = BigchainDB(bdb_root_url)
 
 def main(argv):
+    if len(sys.argv) <= 1 :
+        print ('\n\tUsage : python3 SDK_test.py -i <ID>\n\n\t<ID> can not be empty !\n\n \r\trun python3 SDK_test.py - h for HELP.\n\n')
 
-    raspberry = SEAL("/home/pi/dodo/test/libseadyn.so")
+        sys.exit(2)
+
+    raspberry = SEAL(current_dir+"/libseadyn.so")
     inputfile = ''
+
     if not os.path.exists('database'):
         os.makedirs('database')
     try:
@@ -178,6 +183,9 @@ def main(argv):
             sys.exit()
         elif opt == '-c':
             tx_ids = os.listdir(current_dir + "/database")
+            if not tx_ids:
+                print("\nNo outpul file found. Exiting ...\n")
+                sys.exit()
             print("\n")
             for x in tx_ids:
                 full_tx = bdb.transactions.retrieve(txid=x)
