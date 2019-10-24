@@ -113,7 +113,7 @@ def main(argv):
 
         sys.exit(2)
 
-    raspberry = SEAL(current_dir+"../libs/libseadyn.so")
+    raspberry = SEAL(current_dir+"/../libs/libseadyn.so")
     inputfile = ''
 
     if not os.path.exists('database'):
