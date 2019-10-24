@@ -151,7 +151,7 @@ def main(argv):
                 print(pair.private_key)
                 print(pair.public_key)
 
-                data_lists = os.listdir(current_dir + "/source")
+                data_lists = os.listdir(current_dir + "/../source")
 
                 for data in data_lists:
                     send_data_blockchain(raspberry,inputfile,pair,data)
@@ -182,7 +182,7 @@ def main(argv):
                 print("\n")
             sys.exit()
         elif opt == '-c':
-            tx_ids = os.listdir(current_dir + "/database")
+            tx_ids = os.listdir(current_dir + "/../database")
             if not tx_ids:
                 print("\nNo outpul file found. Exiting ...\n")
                 sys.exit()
