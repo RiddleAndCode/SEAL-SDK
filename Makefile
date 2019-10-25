@@ -1,20 +1,19 @@
-BIN = build
+BIN = ./binary
 
-OBJS = build/object
-
-SOURCEDIR = \
-tests \
+SOURCEDIR = ./tests
 
 SOURCES =
 
+SES_SOURCES = $(SOURCEDIR)/ses_tests.c \
+$(SOURCEDIR)/Unity/unity.c
+
 OUTPUT_LIB_DIR =
 
-LIB_DIR = \
-libs/
+LIB_DIR = ./libs
 
 CC = /usr/bin/gcc
 
-LIBS = -lrt -sea -dl
+LIBS = -lrt -lsea -ldl
 
 DEFINES = \
 
@@ -22,38 +21,48 @@ INCLUDE = \
 -I./inc \
 -I./tests/Unity
 
-FLAGS = -std=c99 $(INCLUDE) $(LIBS) $(DEFINES) -std)
+FLAGS = -std=c99 $(DEFINES)
 
+ifeq ($(target),v1)
+	OUTPUT_LIB_DIR += $(LIB_DIR)/v1
 
-.PHONY: all lib debug clean
-
-v1: $(SOURCEDIR)/v1_tests.c $(SOURCEDIR)/ses_tests.c $(LIB_DIR)/v1/libseal.a $(LIB_DIR)/v1/libsedyn.so
-	OUTPUT_LIB_DIR += libs/v1
 	SOURCES += $(SOURCEDIR)/v1_tests.c \
 	$(SOURCEDIR)/Unity/unity.c
 
-	$(CC) $(FLAGS) -L$(OUTPUT_LIB_DIR) $(LIBS)  -o $@
-
-
-v2: $(SOURCEDIR)/v2_tests.c $(SOURCEDIR)/ses_tests.c $(LIB_DIR)/v2/libseal.a $(LIB_DIR)/v2/libsedyn.so
+else ifeq ($(target),v2)
 	INCLUDE += -I./tests/micro-ecc/include
-	OUTPUT_LIB_DIR += libs/v2
+	LIBS += -lpthread
+	OUTPUT_LIB_DIR += $(LIB_DIR)/v2
+
 	SOURCES += $(SOURCEDIR)/v2_tests.c \
 	$(SOURCEDIR)/Unity/unity.c \
 	$(SOURCEDIR)/micro-ecc/src/uECC.c
 
+else ifeq ($(target),v3)
+	OUTPUT_LIB_DIR += $(LIB_DIR)/v3
 
-	$(CC) $(FLAGS) -L$(OUTPUT_LIB_DIR) $(LIBS)  -o $@
-
-v3: $(SOURCEDIR)/v3_tests.c $(SOURCEDIR)/ses_tests.c $(LIB_DIR)/v3/libseal.a $(LIB_DIR)/v3/libsedyn.so
-	OUTPUT_LIB_DIR += libs/v3
 	SOURCES += $(SOURCEDIR)/v3_tests.c \
 	$(SOURCEDIR)/Unity/unity.c
-	$(CC) $(FLAGS) -L$(OUTPUT_LIB_DIR) $(LIBS)  -o $@
+endif
 
-ses:
+.PHONY: all debug clean
+
+
+$(target): $(SOURCEDIR)/$(target)_tests.c  $(LIB_DIR)/$(target)/libsea.a  $(BIN)/ses 
+	@mkdir -p $(BIN)
+
+	$(CC) $(FLAGS) $(SOURCES) $(INCLUDE) -L$(OUTPUT_LIB_DIR) $(LIBS)  -o $(BIN)/$@
+
+$(BIN)/ses: $(SOURCEDIR)/ses_tests.c
+
+	@mkdir -p $(BIN)
+
+	$(CC) $(FLAGS) $(SES_SOURCES) $(INCLUDE) -L$(OUTPUT_LIB_DIR) $(LIBS)  -o $@
+
+
+
 debug:
-	@echo  $(SOURCE_C) "\n\n" $(SOURCE_OBJ)
+	@echo "\n Sources are" $(SOURCES) "\n Includes are" $(INCLUDE) "\n"
 
 clean:
-	rm -rf build/
+	rm -rf $(BIN)/v1 $(BIN)/v2 $(BIN)/v3 $(BIN)/ses
