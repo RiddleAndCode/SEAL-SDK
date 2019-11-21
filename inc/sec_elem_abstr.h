@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __SECURE_ELEM_ABSTR__
 #define __SECURE_ELEM_ABSTR__
 
@@ -117,16 +121,25 @@ SE_STATUS se_wipe_device(uint8_t index);
 
 SE_STATUS se_close(void);
 
-SE_STATUS se_secure_store(uint8_t zone ,uint8_t * data, int16_t len);
+SE_STATUS se_secure_store(uint8_t zone ,uint8_t * data, uint16_t len);
 
-SE_STATUS se_secure_read(uint8_t zone ,uint8_t * data, int16_t len);
+SE_STATUS se_secure_read(uint8_t zone ,uint8_t * data, uint16_t len);
 
-SE_STATUS se_authenticate(uint8_t slot);
+SE_STATUS se_authenticate(uint8_t slot, uint8_t *key);
 
-SE_STATUS se_secure_storage_personalize(bool lock);
+SE_STATUS se_secure_storage_personalize(bool lock, uint8_t* key_0, uint8_t* key_1, uint8_t* key_2);
 
 SE_STATUS se_secure_storage_close();
 
 SE_STATUS se_secure_storage_init();
 
+SE_STATUS se_configure_hardware(uint8_t  slave_address, uint8_t  bus, uint32_t baud, uint32_t pin_sda, uint32_t pin_scl);
+
+
+
+#endif
+
+
+#ifdef __cplusplus
+}
 #endif
