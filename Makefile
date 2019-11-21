@@ -9,7 +9,7 @@ $(SOURCEDIR)/Unity/unity.c
 
 OUTPUT_LIB_DIR =
 
-LIB_DIR = ./libs
+LIB_DIR = ./libs/raspberry
 
 CC = /usr/bin/gcc
 
