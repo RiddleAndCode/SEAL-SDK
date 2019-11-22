@@ -24,7 +24,7 @@ Including the `sec_elem_abstr.h` header file and linking the static library agai
 
 Secure-Elements. Tests under tests folder are written for raspberry-pi. They are using the same scheme described above  
 
-which you can follow from the Makefile.
+which you can follow from the `Makefile`.
 
 #### Python
 
