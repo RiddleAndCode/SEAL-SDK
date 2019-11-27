@@ -17,7 +17,6 @@ class SEAL:
         self.result = -1
         self.lib = ctypes.CDLL(library_path or 'libseadyn.so')
         self.se_init = self.wrap_function(self.lib,"se_init",ctypes.c_int,[ctypes.c_int])
-        self.se_save_key_pair = self.wrap_function(self.lib,"se_save_key_pair",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_ubyte),ctypes.c_uint16,ctypes.POINTER(ctypes.c_uint8),ctypes.c_uint16])
         self.se_get_random =self.wrap_function(self.lib,"se_get_random",ctypes.c_int,[ctypes.POINTER(ctypes.c_uint8),ctypes.c_uint8])
         self.se_write_data =self.wrap_function(self.lib,"se_write_data",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_ubyte),ctypes.c_uint8])
         self.se_read_data =self.wrap_function(self.lib,"se_read_data",ctypes.c_int,[ctypes.c_ushort,ctypes.POINTER(ctypes.c_uint8),ctypes.c_ushort])
@@ -61,17 +60,16 @@ class SEAL:
 
 
     def save_keypair(self,pubKey,secret):
-        nullptr = ((ctypes.c_uint8) * 1 )()
-        result = self.se_save_key_pair(10,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(pubKey)),0,nullptr,0)
+        result = self.store_data(14,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(pubKey)),64)
         if result != 0:
             raise Exception('se_save_key_pair failed')
         else:
-            self.store_data(0,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(secret)),32)
+            self.store_data(15,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(secret)),32)
             if DEBUG:
                 print("SE se_save_key_pair Success\n")
 
-    def store_data(self,offset,data,datalen):
-        result = self.se_write_data(offset,data,datalen)
+    def store_data(self,slot,data,datalen):
+        result = self.se_write_data(slot,data,datalen)
         if result != 0:
             raise Exception('rnd generation failed')
         else:
@@ -79,10 +77,10 @@ class SEAL:
                 print("SE se_write_data Success\n")
 
 
-    def read_data(self,offset,datalen):
+    def read_data(self,slot,datalen):
 
         data = ((ctypes.c_uint8) * datalen )()
-        result = self.se_read_data(offset,data,datalen)
+        result = self.se_read_data(slot,data,datalen)
         if result != 0:
             raise Exception('read_data failed')
         else:

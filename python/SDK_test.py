@@ -29,8 +29,8 @@ def generate_identity(se):
     print(PUBLIC)
 
 def read_identity(se):
-    return CryptoKeypair(private_key=str(base58.b58encode(se.read_data(0,32)).decode()),
-                         public_key=str(base58.b58encode(se.get_public_key()).decode()))
+    return CryptoKeypair(private_key=str(base58.b58encode(se.read_data(15,32)).decode()),
+                         public_key=str(base58.b58encode(se.read_data(14,64)).decode()))
 
 def hash_data_sources(se,paths,id):
 
