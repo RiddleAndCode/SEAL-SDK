@@ -45,9 +45,6 @@ Copy the contents of arduino-nrfdk folder into `home/Arduino/libraries` folder. 
 
 You can check `libs/arduino-nrfdk/libseal/examples/wallet/wallet.ino` file for working example.
 
-#### WARNING
-*Generate key-pairs command do not work currently due to version conflict, it will be fixed with the next week's release.*
-
 
 
 
