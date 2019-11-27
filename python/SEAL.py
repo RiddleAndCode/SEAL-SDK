@@ -14,6 +14,8 @@ class SEAL:
             library_path <str> : Full path to the compiled file of microECC library (libmicroecc.so)
             curve_name <str> : "secp256r1" (default), "secp160r1", "secp192r1", "secp224r1", "secp256k1"
         """
+        self.PUB_KEY_SLOT = 14
+        self.SEC_KEY_SLOT = 15
         self.result = -1
         self.lib = ctypes.CDLL(library_path or 'libseadyn.so')
         self.se_init = self.wrap_function(self.lib,"se_init",ctypes.c_int,[ctypes.c_int])
@@ -60,21 +62,23 @@ class SEAL:
 
 
     def save_keypair(self,pubKey,secret):
-        result = self.store_data(14,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(pubKey)),64)
+
+        result = self.store_data(self.PUB_KEY_SLOT,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(pubKey)),32)
         if result != 0:
             raise Exception('se_save_key_pair failed')
         else:
-            self.store_data(15,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(secret)),32)
+            self.store_data(self.SEC_KEY_SLOT,(ctypes.c_ubyte*32).from_buffer_copy(base58.b58decode(secret)),32)
             if DEBUG:
                 print("SE se_save_key_pair Success\n")
 
     def store_data(self,slot,data,datalen):
         result = self.se_write_data(slot,data,datalen)
         if result != 0:
-            raise Exception('rnd generation failed')
+            raise Exception('se_write_data failed')
         else:
             if DEBUG:
                 print("SE se_write_data Success\n")
+        return result
 
 
     def read_data(self,slot,datalen):
