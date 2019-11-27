@@ -69,7 +69,8 @@ void setup() {
 void loop() {
 
 
-  ses_tests();
+  test_secure_store();
+  test_store();
   random_tests();
   generate_tests();
   hash_test();
@@ -114,7 +115,135 @@ const uint8_t *fromhex(const char *str) {
   }
   return buf;
 }
+void test_store()
+{
+    Serial.println("\n\n\t     ... Running Storage Tests ... \n\n");
 
+    #define STORE_SLOT_1 10
+    #define STORE_SLOT_2 (STORE_SLOT_1 + 1)
+    #define STORE_SLOT_3 (STORE_SLOT_2 + 1)
+    #define STORE_SLOT_4 (STORE_SLOT_3 + 1)
+    #define STORE_SLOT_5 (STORE_SLOT_4 + 1)
+    #define STORE_SLOT_6 (STORE_SLOT_5 + 1)
+    #define SLOT_SIZE 72
+    uint8_t write_data[SLOT_SIZE] = {0};
+    uint8_t read_data[SLOT_SIZE] = {0};
+    
+    memset(write_data,0xD0,SLOT_SIZE);
+    
+    se_write_data(STORE_SLOT_1,write_data,SLOT_SIZE);
+    se_read_data(STORE_SLOT_1,read_data,SLOT_SIZE);
+    
+    for (size_t i = 0; i < SLOT_SIZE; i++)
+    {
+      Serial.print(read_data[i], HEX);
+      Serial.print("-");
+
+    }
+    
+    Serial.println(""); 
+    
+    if(memcmp(write_data,read_data,SLOT_SIZE) == 0)
+      Serial.println("\n\n\t      Store & Read Success for slot 10  \n\n");
+    else
+      Serial.println("\n\n\t      Store & Read Fail for slot 10  \n\n");
+
+      
+
+    memset(read_data,0,SLOT_SIZE);
+    
+    se_write_data(STORE_SLOT_2,write_data,SLOT_SIZE);
+    se_read_data(STORE_SLOT_2,read_data,SLOT_SIZE);
+    for (size_t i = 0; i < SLOT_SIZE; i++)
+    {
+      Serial.print(read_data[i], HEX);
+      Serial.print("-");
+  
+    }
+    
+    Serial.println("");
+    
+    if(memcmp(write_data,read_data,SLOT_SIZE) == 0)
+      Serial.println("\n\n\t      Store & Read Success for slot 11 \n\n");
+    else
+      Serial.println("\n\n\t      Store & Read Fail for slot 11  \n\n");
+    memset(read_data,0,SLOT_SIZE);
+
+
+    
+
+    se_write_data(STORE_SLOT_3,write_data,SLOT_SIZE);
+    se_read_data(STORE_SLOT_3,read_data,SLOT_SIZE);
+    for (size_t i = 0; i < SLOT_SIZE; i++)
+    {
+      Serial.print(read_data[i], HEX);
+      Serial.print("-");
+  
+    }
+    
+    Serial.println("");
+    if(memcmp(write_data,read_data,SLOT_SIZE) == 0)
+      Serial.println("\n\n\t      Store & Read Success for slot 12  \n\n");
+    else
+      Serial.println("\n\n\t      Store & Read Fail for slot 12  \n\n");
+    memset(read_data,0,SLOT_SIZE);
+
+
+
+    se_write_data(STORE_SLOT_4,write_data,SLOT_SIZE);
+    se_read_data(STORE_SLOT_4,read_data,SLOT_SIZE);
+    for (size_t i = 0; i < SLOT_SIZE; i++)
+    {
+      Serial.print(read_data[i], HEX);
+      Serial.print("-");
+  
+    }
+    
+    Serial.println("");
+    if(memcmp(write_data,read_data,SLOT_SIZE) == 0)
+      Serial.println("\n\n\t      Store & Read Success for slot 13  \n\n");
+    else
+      Serial.println("\n\n\t      Store & Read Fail for slot 13  \n\n");
+    memset(read_data,0,SLOT_SIZE);
+
+
+
+    se_write_data(STORE_SLOT_5,write_data,SLOT_SIZE);
+    se_read_data(STORE_SLOT_5,read_data,SLOT_SIZE);
+    for (size_t i = 0; i < SLOT_SIZE; i++)
+    {
+      Serial.print(read_data[i], HEX);
+      Serial.print("-");
+  
+    }
+    
+    Serial.println("");
+    if(memcmp(write_data,read_data,SLOT_SIZE) == 0)
+      Serial.println("\n\n\t      Store & Read Success for slot 14  \n\n");
+    else
+      Serial.println("\n\n\t      Store & Read Fail for slot 14  \n\n");
+    memset(read_data,0,SLOT_SIZE);
+
+    se_write_data(STORE_SLOT_6,write_data,SLOT_SIZE);
+    se_read_data(STORE_SLOT_6,read_data,SLOT_SIZE);
+    for (size_t i = 0; i < SLOT_SIZE; i++)
+    {
+      Serial.print(read_data[i], HEX);
+      Serial.print("-");
+  
+    }
+    
+    Serial.println("");
+    if(memcmp(write_data,read_data,SLOT_SIZE) == 0)
+      Serial.println("\n\n\t      Store & Read Success for slot 15 \n\n");
+    else
+      Serial.println("\n\n\t      Store & Read Fail for slot 15  \n\n");
+
+    Serial.println("\n\n");
+    Serial.println("------------------------------------------------------------------------------------------------------------------");
+    
+  
+}
 void verify_test()
 {
   Serial.println("\n\n\t     ... Running Signing & Verifying Tests ... \n\n");
@@ -239,7 +368,7 @@ void random_tests()
 }
 
 
-void ses_tests()
+void test_secure_store()
 {
   
   Serial.println("\n\n\t     ... Running Secure-Storage Tests ... \n\n");
