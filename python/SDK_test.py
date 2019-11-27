@@ -23,14 +23,13 @@ def generate_identity(se):
     SECRET=CryptoKeypair.private_key
     PUBLIC=CryptoKeypair.public_key
     se.save_keypair(PUBLIC,SECRET)
-    print("Hash of priv key :")
-    print(se.get_hash(SECRET,len(SECRET)).hex())
-    print("pub key :")
-    print(PUBLIC)
+
+
+    print("pub key : "+str(PUBLIC))
 
 def read_identity(se):
-    return CryptoKeypair(private_key=str(base58.b58encode(se.read_data(0,32)).decode()),
-                         public_key=str(base58.b58encode(se.get_public_key()).decode()))
+    return CryptoKeypair(private_key=str(base58.b58encode(se.read_data(15,32)).decode()),
+                         public_key=str(base58.b58encode(se.read_data(14,32)).decode()))
 
 def hash_data_sources(se,paths,id):
 

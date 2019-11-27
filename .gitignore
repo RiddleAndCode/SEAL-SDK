@@ -3,3 +3,4 @@ build/
 libs/libcbig.a
 __pycache__/
 database/
+notify.sh
