@@ -118,7 +118,7 @@ def main(argv):
     if not os.path.exists('database'):
         os.makedirs('database')
     try:
-        opts, args = getopt.getopt(argv,"cQqsghi:",["ifile="])
+        opts, args = getopt.getopt(argv,"cQqsghit:",["ifile="])
     except getopt.GetoptError:
         print ('\n\tUsage : python3 SDK_test.py -i <ID>\n\n \
         \r\trun python3 SDK_test.py - h for HELP.\n')
@@ -200,6 +200,10 @@ def main(argv):
             print("\t\tHashes match for all the files under ./database\n\n \
             \t\t     ... TESTS PASSED ...\n\n")
             sys.exit()
+        elif opt == '-t':
+            pubkey = se.get_public_key(0)
+            print(pubkey)
+
 
 
     raspberry.close_comms()

@@ -92,16 +92,16 @@ class SEAL:
                 print("SE se_read_data Success\n")
         return bytes(data)
 
-    def get_public_key(self):
+    def get_public_key(self,slot):
         pubKey = ((ctypes.c_uint8) * 64 )()
         nullptr = ((ctypes.c_ushort) * 1 )()
-        result = self.se_get_pubkey(10,pubKey,nullptr)
+        result = self.se_get_pubkey(slot,pubKey,nullptr)
         if result != 0:
             raise Exception('get_public_key failed')
         else:
             if DEBUG:
                 print("SE se_get_pubkey Success\n")
-        return bytes(bytearray(pubKey)[:32])
+        return bytes(bytearray(pubKey)[:64])
 
     def get_hash(self,data,dataLen):
         b_data = str(data).encode('utf-8')
