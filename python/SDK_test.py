@@ -206,12 +206,16 @@ def main(argv):
     Stuck out somewhere with folks I don\'t know \
     Cause you keep me nice and you keep me warm \
     Wanna feel you on me, can\'t wait to get back there again '
+            identity = raspberry.get_public_key(0)
+            print(identity)
             raspberry.authenticate_slot(5,password)
             raspberry.secure_store(5,sample,len(sample))
-            secret = raspberry.secure_read(5,255)
+            secret = raspberry.secure_read(5,len(sample))
             print(secret)
-            secret = raspberry.secure_read(0,255)
+            secret = raspberry.secure_read(0,32)
             print(secret)
+            sha = raspberry.get_hash(secret,len(secret))
+            print(sha)
 
 
     raspberry.close_comms()
