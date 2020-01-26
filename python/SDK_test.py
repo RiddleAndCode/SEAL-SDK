@@ -135,6 +135,7 @@ def main(argv):
             \r   -s\t:  hash the file under ./source save the result under ./database with TX-ID name and send the digest to the blockchain.\n \
             \r   -q\t:  to querry the blockchain with the <ID> for matching transaction under this name and list them by the TRANSACTION-ID.\n \
             \r   -Q\t:  Get the full transaction details for all the transactions with the matching <ID>\n \
+            \r   -t\t:  Test functions for secure storage\n \
             \r   -c\t:  Check the hash values in ./database against the values get from the blockchain.\n ')
             sys.exit()
         elif opt in ("-i", "--ifile"):
