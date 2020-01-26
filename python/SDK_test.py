@@ -13,7 +13,7 @@ import sys, getopt
 CryptoKeypair = namedtuple('CryptoKeypair', ('private_key', 'public_key'))
 current_dir = os.path.dirname(os.path.abspath(__file__))
 bdb_root_url = 'https://ipdb-eu2.riddleandcode.com'
-
+password = 'RIDDLE&CODEROCKS!'
 
 
 def generate_identity(se):
@@ -118,8 +118,9 @@ def main(argv):
     if not os.path.exists('database'):
         os.makedirs('database')
     try:
-        opts, args = getopt.getopt(argv,"cQqsghit:",["ifile="])
-    except getopt.GetoptError:
+        opts, args = getopt.getopt(argv,"tcQqsghi:",["ifile="])
+    except getopt.GetoptError as err:
+        print(err)
         print ('\n\tUsage : python3 SDK_test.py -i <ID>\n\n \
         \r\trun python3 SDK_test.py - h for HELP.\n')
         sys.exit(2)
@@ -201,9 +202,16 @@ def main(argv):
             \t\t     ... TESTS PASSED ...\n\n")
             sys.exit()
         elif opt == '-t':
-            pubkey = se.get_public_key(0)
-            print(pubkey)
-
+            sample = 'When I\'m far from home and them cold winds blow \
+    Stuck out somewhere with folks I don\'t know \
+    Cause you keep me nice and you keep me warm \
+    Wanna feel you on me, can\'t wait to get back there again '
+            raspberry.authenticate_slot(5,password)
+            raspberry.secure_store(5,sample,len(sample))
+            secret = raspberry.secure_read(5,255)
+            print(secret)
+            secret = raspberry.secure_read(0,255)
+            print(secret)
 
 
     raspberry.close_comms()
