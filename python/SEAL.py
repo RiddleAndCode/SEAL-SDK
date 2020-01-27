@@ -147,17 +147,16 @@ class SEAL:
                 print("SE sign Success\n")
         return bytes((signature))
 
-    def verify(self,data,dataLen):
-        b_data = str(data).encode('utf-8')
-        sha = ((ctypes.c_uint8) * 32 )()
-        shaLen = ((ctypes.c_uint8) * 2 )(32)
-        result = self.se_verify_external(b_data,dataLen,sha,shaLen)
-        if result != 0:
+    def verify(self,hash,signature,publickey):
+        hash_len = len(hash)
+        signature_len = len(signature)
+        publickey_len = len(publickey)
+        result = self.se_verify(0,(ctypes.c_ubyte*publickey_len).from_buffer_copy(publickey),0,(ctypes.c_ubyte*hash_len).from_buffer_copy(hash),0,(ctypes.c_ubyte*signature_len).from_buffer_copy(signature),0)
+        if result != 0xF6:
             raise Exception('verify failed')
         else:
             if DEBUG:
                 print("SE verify Success\n")
-        return bytes(sha)
 
     def authenticate_slot(self,slot,secret):
         str_len = len(secret)
