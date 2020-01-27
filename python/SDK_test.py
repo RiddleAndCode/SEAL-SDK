@@ -225,8 +225,9 @@ def main(argv):
             sha = raspberry.get_hash(sample,len(sample))
             print(sha)
             signature=raspberry.sign(0,sha)
-            print(signature)
-
+            print("Signature : "+ str(signature))
+            print(raspberry.get_public_key(0))
+            raspberry.verify(sha,signature,raspberry.get_public_key(0))
 
     raspberry.close_comms()
 
