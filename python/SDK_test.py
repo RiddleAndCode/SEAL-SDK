@@ -223,7 +223,7 @@ def main(argv):
     Cause you keep me nice and you keep me warm \
     Wanna feel you on me, can\'t wait to get back there again '
             sha = raspberry.get_hash(sample,len(sample))
-            print(sha)
+            print("Signature : "+ str(sha))
             signature=raspberry.sign(0,sha)
             print("Signature : "+ str(signature))
             print(raspberry.get_public_key(0))
