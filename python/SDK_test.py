@@ -13,7 +13,7 @@ import sys, getopt
 CryptoKeypair = namedtuple('CryptoKeypair', ('private_key', 'public_key'))
 current_dir = os.path.dirname(os.path.abspath(__file__))
 bdb_root_url = 'https://ipdb-eu2.riddleandcode.com'
-
+password = 'RIDDLE&CODEROCKS!'
 
 
 def generate_identity(se):
@@ -118,8 +118,9 @@ def main(argv):
     if not os.path.exists('database'):
         os.makedirs('database')
     try:
-        opts, args = getopt.getopt(argv,"cQqsghi:",["ifile="])
-    except getopt.GetoptError:
+        opts, args = getopt.getopt(argv,"tcQqsghi:",["ifile="])
+    except getopt.GetoptError as err:
+        print(err)
         print ('\n\tUsage : python3 SDK_test.py -i <ID>\n\n \
         \r\trun python3 SDK_test.py - h for HELP.\n')
         sys.exit(2)
@@ -134,6 +135,7 @@ def main(argv):
             \r   -s\t:  hash the file under ./source save the result under ./database with TX-ID name and send the digest to the blockchain.\n \
             \r   -q\t:  to querry the blockchain with the <ID> for matching transaction under this name and list them by the TRANSACTION-ID.\n \
             \r   -Q\t:  Get the full transaction details for all the transactions with the matching <ID>\n \
+            \r   -t\t:  Test functions for secure storage\n \
             \r   -c\t:  Check the hash values in ./database against the values get from the blockchain.\n ')
             sys.exit()
         elif opt in ("-i", "--ifile"):
@@ -200,6 +202,21 @@ def main(argv):
             print("\t\tHashes match for all the files under ./database\n\n \
             \t\t     ... TESTS PASSED ...\n\n")
             sys.exit()
+        elif opt == '-t':
+            sample = 'When I\'m far from home and them cold winds blow \
+    Stuck out somewhere with folks I don\'t know \
+    Cause you keep me nice and you keep me warm \
+    Wanna feel you on me, can\'t wait to get back there again '
+            identity = raspberry.get_public_key(0)
+            print(identity)
+            raspberry.authenticate_slot(5,password)
+            raspberry.secure_store(5,sample,len(sample))
+            secret = raspberry.secure_read(5,len(sample))
+            print(secret)
+            secret = raspberry.secure_read(0,32)
+            print(secret)
+            sha = raspberry.get_hash(secret,len(secret))
+            print(sha)
 
 
     raspberry.close_comms()
