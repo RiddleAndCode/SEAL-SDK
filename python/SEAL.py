@@ -153,9 +153,11 @@ class SEAL:
         result = self.se_verify(0,(ctypes.c_ubyte*publickey_len).from_buffer_copy(publickey),0,(ctypes.c_ubyte*hash_len).from_buffer_copy(hash),0,(ctypes.c_ubyte*signature_len).from_buffer_copy(signature),0)
         if result != 0xF6:
             raise Exception('verify failed')
+            return False
         else:
             if DEBUG:
                 print("SE verify Success\n")
+            return True
 
     def authenticate_slot(self,slot,secret):
         str_len = len(secret)
