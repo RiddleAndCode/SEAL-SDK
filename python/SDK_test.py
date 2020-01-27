@@ -118,7 +118,7 @@ def main(argv):
     if not os.path.exists('database'):
         os.makedirs('database')
     try:
-        opts, args = getopt.getopt(argv,"tcQqsghi:",["ifile="])
+        opts, args = getopt.getopt(argv,"vtcQqsghi:",["ifile="])
     except getopt.GetoptError as err:
         print(err)
         print ('\n\tUsage : python3 SDK_test.py -i <ID>\n\n \
@@ -217,7 +217,17 @@ def main(argv):
             print(secret)
             sha = raspberry.get_hash(secret,len(secret))
             print(sha)
-
+        elif opt == '-v':
+            sample = 'When I\'m far from home and them cold winds blow \
+    Stuck out somewhere with folks I don\'t know \
+    Cause you keep me nice and you keep me warm \
+    Wanna feel you on me, can\'t wait to get back there again '
+            sha = raspberry.get_hash(sample,len(sample))
+            print("Signature : "+ str(sha))
+            signature=raspberry.sign(0,sha)
+            print("Signature : "+ str(signature))
+            public_key = raspberry.get_public_key(0)
+            print("Verify result is : " ,(raspberry.verify(sha,signature,public_key)))
 
     raspberry.close_comms()
 
