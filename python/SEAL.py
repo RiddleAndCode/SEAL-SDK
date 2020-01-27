@@ -25,11 +25,15 @@ class SEAL:
         self.se_read_data =self.wrap_function(self.lib,"se_read_data",ctypes.c_int,[ctypes.c_ushort,ctypes.POINTER(ctypes.c_uint8),ctypes.c_ushort])
         self.se_get_pubkey =self.wrap_function(self.lib,"se_get_pubkey",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8),ctypes.POINTER(ctypes.c_ushort)])
         self.se_get_sha256 =self.wrap_function(self.lib,"se_get_sha256",ctypes.c_int,[ctypes.c_char_p,ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8),ctypes.POINTER(ctypes.c_uint8)])
+        self.se_sign =self.wrap_function(self.lib,"se_sign",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8),ctypes.c_ushort,ctypes.POINTER(ctypes.c_uint8),ctypes.POINTER(ctypes.c_uint8)])
+        self.se_verify =self.wrap_function(self.lib,"se_verify_external",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8),ctypes.c_ushort,ctypes.POINTER(ctypes.c_uint8),ctypes.c_ushort,ctypes.POINTER(ctypes.c_uint8),ctypes.c_ushort])
         self.se_authenticate =self.wrap_function(self.lib,"se_authenticate",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8)])
         self.se_secure_store =self.wrap_function(self.lib,"se_secure_store",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8),ctypes.c_uint8])
         self.se_secure_read =self.wrap_function(self.lib,"se_secure_read",ctypes.c_int,[ctypes.c_uint8,ctypes.POINTER(ctypes.c_uint8),ctypes.c_uint8])
         self.se_close= self.wrap_function(self.lib,"se_close",ctypes.c_int,[])
         self.ses_close= self.wrap_function(self.lib,"se_secure_storage_close",ctypes.c_int,[])
+
+
 
         result = self.se_init(ctypes.c_int(0))
         if result != 0:
@@ -129,6 +133,30 @@ class SEAL:
         else:
             if DEBUG:
                 print("SE se_get_sha256 Success\n")
+        return bytes(sha)
+
+    def sign(self,slot,message):
+        signature = ((ctypes.c_uint8) * 64 )()
+        str_len = len(message)
+        # (ctypes.c_ubyte*str_len).from_buffer_copy(message.encode())
+        result = self.se_sign(slot,(ctypes.c_ubyte*str_len).from_buffer_copy(message),0,signature,None)
+        if result != 0:
+            raise Exception('sign failed')
+        else:
+            if DEBUG:
+                print("SE sign Success\n")
+        return bytes((signature))
+
+    def verify(self,data,dataLen):
+        b_data = str(data).encode('utf-8')
+        sha = ((ctypes.c_uint8) * 32 )()
+        shaLen = ((ctypes.c_uint8) * 2 )(32)
+        result = self.se_verify_external(b_data,dataLen,sha,shaLen)
+        if result != 0:
+            raise Exception('verify failed')
+        else:
+            if DEBUG:
+                print("SE verify Success\n")
         return bytes(sha)
 
     def authenticate_slot(self,slot,secret):
