@@ -131,7 +131,7 @@ class SEAL:
             raise Exception('get_hash failed')
         else:
             if DEBUG:
-                print("SE se_get_sha256 Success\n")
+                print("SE get_hash Success\n")
         return bytes(sha)
 
     def sign(self,slot,message):
