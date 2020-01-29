@@ -4,3 +4,4 @@ libs/libcbig.a
 __pycache__/
 database/
 notify.sh
+python/venv
